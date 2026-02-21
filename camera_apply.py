@@ -8,8 +8,9 @@ Usage:
     python3 camera_apply.py input.mp4 camera-script.json output.mp4
 
 Optional flags:
+    --start 0           Start time in seconds within input (default: 0)
+    --duration 30       Output duration in seconds (default: 30, or full video if --start not used)
     --fps 30            Output frame rate (default: match input)
-    --duration 30       Total video duration in seconds (default: 30)
     --no-subs           Skip burned-in subtitles
     --srt               Also write output.srt alongside output video
     --sub-size 36       Subtitle font size (default: 36)
@@ -251,8 +252,9 @@ def main():
     parser.add_argument("input",             help="Input video file (full-res recording)")
     parser.add_argument("script",            help="camera-script.json from teleprompter")
     parser.add_argument("output",            help="Output video file")
+    parser.add_argument("--start",       type=float, default=0.0,   help="Start time in seconds within input (default: 0)")
     parser.add_argument("--fps",         type=float, default=None,  help="Output FPS (default: match input)")
-    parser.add_argument("--duration",    type=float, default=30.0,  help="Total duration in seconds (default: 30)")
+    parser.add_argument("--duration",    type=float, default=None,  help="Output duration in seconds (required with --start; else uses full input length)")
     parser.add_argument("--no-subs",     action="store_true",       help="Skip burned-in subtitles")
     parser.add_argument("--srt",         action="store_true",       help="Also write .srt file alongside output")
     parser.add_argument("--sub-size",    type=int,   default=36,    help="Subtitle font size (default: 36)")
@@ -274,8 +276,15 @@ def main():
     src_w        = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     src_h        = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     src_total    = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    # Auto-detect duration from input if not explicitly set
-    duration     = args.duration if args.duration != 30.0 else src_total / src_fps
+    src_duration = src_total / src_fps
+
+    if args.start > 0:
+        if args.duration is None:
+            print("Error: --duration is required when using --start")
+            sys.exit(1)
+        duration = args.duration
+    else:
+        duration = args.duration if args.duration is not None else src_duration
     # H.264 requires even dimensions — crop by 1px if odd
     src_w        = src_w if src_w % 2 == 0 else src_w - 1
     src_h        = src_h if src_h % 2 == 0 else src_h - 1
@@ -287,7 +296,12 @@ def main():
         srt_path = str(Path(args.output).with_suffix(".srt"))
         write_srt(beats, duration, srt_path)
 
-    print(f"Input:  {src_w}x{src_h} @ {src_fps:.2f}fps  ({src_total} frames, {src_total/src_fps:.1f}s)")
+    if args.start > 0:
+        start_frame = int(round(args.start * src_fps))
+        cap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
+        print(f"Input:  {src_w}x{src_h} @ {src_fps:.2f}fps  (seeking to {args.start:.1f}s = frame {start_frame})")
+    else:
+        print(f"Input:  {src_w}x{src_h} @ {src_fps:.2f}fps  ({src_total} frames, {src_duration:.1f}s)")
     print(f"Output: {src_w}x{src_h} @ {fps:.2f}fps  ({total_frames} frames, {duration:.1f}s)")
     if not args.no_subs:
         print(f"Subtitles: burned-in  size={args.sub_size}  opacity={args.sub_opacity}")
@@ -305,7 +319,7 @@ def main():
     print("Processing frames...")
     for fi in range(total_frames):
         ret, frame = cap.read()
-        if not ret:
+        if not ret and args.start == 0:
             cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
             ret, frame = cap.read()
         if not ret:
@@ -322,7 +336,7 @@ def main():
         if fi % max(1, int(fps)) == 0:
             elapsed = fi / fps
             bi      = beat_idx[fi]
-            print(f"  {elapsed:5.1f}s / {args.duration}s  "
+            print(f"  {elapsed:5.1f}s / {duration}s  "
                   f"beat={beats[bi]['id']:3s}  "
                   f"zoom={zooms[fi]:.2f}x  "
                   f"fx={fxs[fi]:.0f}%  fy={fys[fi]:.0f}%",
@@ -352,7 +366,11 @@ def main():
     print("Encoding to MP4 with FFmpeg...")
     ffmpeg_cmd = ["ffmpeg", "-y", "-i", tmp_avi]
     if has_audio:
-        ffmpeg_cmd += ["-i", args.input, "-map", "0:v:0", "-map", "1:a:0"]
+        if args.start > 0:
+            ffmpeg_cmd += ["-ss", str(args.start), "-t", str(duration), "-i", args.input]
+        else:
+            ffmpeg_cmd += ["-i", args.input]
+        ffmpeg_cmd += ["-map", "0:v:0", "-map", "1:a:0"]
     else:
         ffmpeg_cmd += ["-map", "0:v:0"]
     ffmpeg_cmd += [

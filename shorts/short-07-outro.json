@@ -1,0 +1,5 @@
+[
+  {"id": "7a", "label": "Back to intro", "script": "The Color Palette Maker was built using React, Node.js, and a Python OpenCV pipeline for k-means clustering and smart region detection.", "camera": {"zoom": 1, "duration": 0.35, "focusX": 50, "focusY": 50, "transition": "ease-out"}, "note": "Full intro page"},
+  {"id": "7b", "label": "Camera Script Editor", "script": "This demo video was created using a custom Camera Script Editor tool.", "camera": {"zoom": 1, "duration": 0.35, "focusX": 50, "focusY": 50, "transition": "ease-out"}, "note": "Full intro page"},
+  {"id": "7c", "label": "Full stack close", "script": "That was built using React 18, Vite 5, JSX, and inline styling.", "camera": {"zoom": 1, "duration": 0.35, "focusX": 50, "focusY": 50, "transition": "ease-out"}, "note": "Fade out to close"}
+]

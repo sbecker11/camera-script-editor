@@ -1,0 +1,4 @@
+[
+  {"id": "5a", "label": "Detect regions", "script": "Click the 'detect all regions' menu item.", "camera": {"zoom": 1.2, "duration": 0.35, "focusX": 75, "focusY": 50, "transition": "ease-in-out"}, "note": "Pan/zoom to show new regions overlaying the image"},
+  {"id": "5b", "label": "Delete regions", "script": "Click the 'Delete Regions (click)' checkbox to delete regions manually.", "camera": {"zoom": 1.2, "duration": 0.35, "focusX": 75, "focusY": 50, "transition": "ease-in-out"}, "note": "Click on a region to delete it"}
+]

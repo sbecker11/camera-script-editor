@@ -1,0 +1,4 @@
+[
+  {"id": "3a", "label": "Swatches appear", "script": "The sampled colors appear as swatches...", "camera": {"zoom": 1.2, "duration": 0.3, "focusX": 50, "focusY": 70, "transition": "ease-in"}, "note": "Zoom toward palette row"},
+  {"id": "3b", "label": "Hex detail", "script": "...each tagged with its hex color value.", "camera": {"zoom": 1.6, "duration": 0.2, "focusX": 30, "focusY": 75, "transition": "ease-in"}, "note": "Tight on one swatch + hex label"}
+]

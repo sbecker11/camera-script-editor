@@ -1,0 +1,6 @@
+[
+  {"id": "2a", "label": "Create palette from photo", "script": "Create a new palette by just uploading a photo.", "camera": {"zoom": 1.1, "duration": 0.4, "focusX": 50, "focusY": 40, "transition": "ease-out"}, "note": "Upload a photo to create palette"},
+  {"id": "2b", "label": "Rename palette", "script": "Rename the color palette to something meaningful.", "camera": {"zoom": 1.1, "duration": 0.4, "focusX": 50, "focusY": 40, "transition": "ease-out"}, "note": "Set palette name to 'blues' and pull back to see new palette name"},
+  {"id": "2c", "label": "Add color swatches", "script": "Click to start adding color samples.", "camera": {"zoom": 1, "duration": 0.35, "focusX": 50, "focusY": 50, "transition": "ease-in-out"}, "note": "Zoom to click the 'add swatches (click)' checkbox"},
+  {"id": "2d", "label": "Double-click to add samples", "script": "[ no narration -- let the visual speak ]", "camera": {"zoom": 1, "duration": 0.4, "focusX": 50, "focusY": 60, "transition": "ease-out"}, "note": "Double-click to add some color samples"}
+]

@@ -13,7 +13,7 @@ else
 fi
 
 # the input file
-input_file=recording.mov
+input_file=~/Downloads/recording.mov
 
 # the timestamp
 dt=$(date +%Y-%m-%d_%H-%M-%S)

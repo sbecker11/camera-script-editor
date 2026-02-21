@@ -1,4 +1,4 @@
-# movie/
+# camera_script_editor
 
 Post-production pipeline for the Color Palette Maker demo video.
 
@@ -15,12 +15,12 @@ This folder contains two tools:
 - Node.js 18+
 
 ### Python (Post-processing)
-Python 3.8+ is required. Create a virtual environment inside `movie/` and install dependencies:
+Python 3.8+ is required. FFmpeg is also required (for audio muxing and merge). Create a virtual environment and install dependencies:
 
 ```bash
-cd movie
 python3 -m venv venv
 source venv/bin/activate
+pip install --upgrade pip
 pip install opencv-python numpy
 ```
 
@@ -29,16 +29,10 @@ Verify the install:
 python3 -c "import cv2, numpy; print('cv2', cv2.__version__, '/ numpy', numpy.__version__)"
 ```
 
-To reactivate the venv in a new terminal session before running `doit.sh`:
-```bash
-source venv/bin/activate
-```
-
 ## Setup
 
 ### Teleprompter app
 ```bash
-cd movie
 npm install
 npm run dev
 ```
@@ -50,7 +44,7 @@ Create and activate the virtual environment as described in Requirements above. 
 ## Workflow
 
 1. **Direct** — run the teleprompter app, review each beat's zoom/focus/transition settings
-2. **Export** — click "export JSON" in the teleprompter, save as `camera-script.json` in `movie/`
+2. **Export** — save the script as `camera-script.json` in the project root (or use the shorts in `shorts/`)
 3. **Record** — use QuickTime to capture the palette-maker app at full resolution (static, no zoom)
 4. **Process** — run `doit.sh` to apply the camera script and generate the final video:
 
@@ -61,7 +55,7 @@ Create and activate the virtual environment as described in Requirements above. 
 This will:
 - Timestamp and archive the camera script used
 - Apply zoom, pan, easing, and burned-in subtitles to the recording
-- Write `final.mp4` and `final.srt` to the `archive/` folder
+- Write `output-*.mp4` and `output-*.srt` to the `archive/` folder
 - Open the result in QuickTime for review
 
 ## Files
@@ -69,19 +63,43 @@ This will:
 | File | Description |
 |------|-------------|
 | `camera_apply.py` | Post-processing script |
-| `camera-script.json` | Current camera script (edit between runs) |
-| `doit.sh` | One-command render + archive + review |
+| `camera-script.json` | Full camera script (edit between runs) |
+| `shorts/` | Per-short scripts (short-01-intro.json, etc.) |
+| `shorts-manifest.json` | Start + duration for each short (chain without overlap) |
+| `render-shorts.sh` | Render all shorts; use --merge to concatenate |
+| `doit.sh` | One-command render + archive + review (full script) |
 | `recording.mov` | Full-resolution QuickTime capture |
+| `index.html` | Teleprompter entry point |
 | `venv/` | Python virtual environment (not committed to git) |
 | `src/App.jsx` | Teleprompter React app |
 | `archive/` | Timestamped outputs from each render run |
+
+## Multiple shorts (start + duration)
+
+To create multiple shorts from the same recording, use `--start` and `--duration`:
+
+```bash
+python3 camera_apply.py recording.mov shorts/short-01-intro.json shorts/short-01-intro.mp4 --start 0 --duration 12
+python3 camera_apply.py recording.mov shorts/short-02-create.json shorts/short-02-create.mp4 --start 12 --duration 18
+# ... each short's start = previous start + previous duration
+```
+
+Use `render-shorts.sh` to process all shorts from `shorts-manifest.json`:
+
+```bash
+./render-shorts.sh recording.mov           # Renders shorts/short-01-intro.mp4, short-02-create.mp4, ...
+./render-shorts.sh recording.mov --merge   # Renders all shorts, then merges to shorts/merged-*.mp4
+```
+
+`shorts-manifest.json` defines non-overlapping segments (script, start, duration). Adjust start/duration to match your recording.
 
 ## camera_apply.py options
 
 ```
 python3 camera_apply.py input.mov script.json output.mp4 [options]
 
---duration 30       Total video duration in seconds (default: 30)
+--start 0           Start time in seconds within input (default: 0; requires --duration when > 0)
+--duration 30       Output duration in seconds (required with --start; else uses full input length)
 --fps 30            Output frame rate (default: match input)
 --no-subs           Skip burned-in subtitles
 --srt               Also write .srt subtitle file

@@ -1,0 +1,10 @@
+node_modules/
+venv/
+.git/
+
+# macOS
+.DS_Store
+
+# output files
+archive/
+script-*.json

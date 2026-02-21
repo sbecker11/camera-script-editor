@@ -1,0 +1,7 @@
+[
+  {"id": "6a", "label": "K-means on regions", "script": "Now use k-means clustering to automatically find the K primary colors (5, 7, or 9) from only the new set of regions.", "camera": {"zoom": 1.5, "duration": 0, "focusX": 50, "focusY": 20, "transition": "HOLD"}, "note": "Hold tight while control changes"},
+  {"id": "6b", "label": "Swatch region matching", "script": "Now we'll match each region to its nearest swatch.", "camera": {"zoom": 1, "duration": 0, "focusX": 50, "focusY": 20, "transition": "HOLD"}, "note": "Zoom to image to see all pairs"},
+  {"id": "6c", "label": "Region-swatch match", "script": "Swatches have letters, Regions have numbers.", "camera": {"zoom": 3, "duration": 0, "focusX": 50, "focusY": 20, "transition": "HOLD"}, "note": "Zoom in to see one pair"},
+  {"id": "6d", "label": "Roll-over regions", "script": "Roll over a region to see its matched swatch.", "camera": {"zoom": 1, "duration": 0, "focusX": 50, "focusY": 20, "transition": "HOLD"}, "note": "Zoom out to show regions and swatches"},
+  {"id": "6e", "label": "Roll-over swatches", "script": "Roll over a swatch to see its matched region.", "camera": {"zoom": 1, "duration": 0, "focusX": 50, "focusY": 20, "transition": "HOLD"}, "note": "Zoom out to show regions and swatches"}
+]

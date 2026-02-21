@@ -1,0 +1,6 @@
+[
+  {"id": "4a", "label": "Delete swatches", "script": "...and a delete button.", "camera": {"zoom": 1.4, "duration": 0, "focusX": 50, "focusY": 20, "transition": "CUT"}, "note": "Zoom to delete all swatches"},
+  {"id": "4b", "label": "K-means control", "script": "Use k-means clustering to automatically select K primary colors (5, 7, or 9).", "camera": {"zoom": 1.5, "duration": 0, "focusX": 50, "focusY": 20, "transition": "HOLD"}, "note": "Hold tight while control changes"},
+  {"id": "4c", "label": "Silent beat", "script": "[ no narration -- let the visual speak ]", "camera": {"zoom": 1.2, "duration": 0.4, "focusX": 50, "focusY": 60, "transition": "ease-out"}, "note": "Pull back to show updated swatches"},
+  {"id": "4d", "label": "Clear all swatches", "script": "Use the menu to Clear all Swatches.", "camera": {"zoom": 1.2, "duration": 0.4, "focusX": 50, "focusY": 60, "transition": "ease-out"}, "note": "Pull back to show no more swatches"}
+]

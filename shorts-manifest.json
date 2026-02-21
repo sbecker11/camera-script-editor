@@ -1,0 +1,9 @@
+[
+  { "script": "shorts/short-01-intro.json",    "start": 0,   "duration": 12 },
+  { "script": "shorts/short-02-create.json",   "start": 12,  "duration": 18 },
+  { "script": "shorts/short-03-swatches.json", "start": 30,  "duration": 8 },
+  { "script": "shorts/short-04-kmeans-clear.json", "start": 38,  "duration": 16 },
+  { "script": "shorts/short-05-regions.json",  "start": 54,  "duration": 10 },
+  { "script": "shorts/short-06-matching.json", "start": 64,  "duration": 22 },
+  { "script": "shorts/short-07-outro.json",    "start": 86,  "duration": 12 }
+]
